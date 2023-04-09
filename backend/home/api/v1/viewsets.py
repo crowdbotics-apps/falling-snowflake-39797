@@ -1,3 +1,7 @@
+from rest_framework import viewsets
+from home.models import Boxes,BoxStatuses,Locations
+from .serializers import BoxesSerializer,BoxStatusesSerializer,LocationsSerializer
+from rest_framework import authentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
@@ -28,3 +32,18 @@ class LoginViewSet(ViewSet):
         token, created = Token.objects.get_or_create(user=user)
         user_serializer = UserSerializer(user)
         return Response({"token": token.key, "user": user_serializer.data})
+
+class BoxStatusesViewSet(viewsets.ModelViewSet):
+    serializer_class = BoxStatusesSerializer
+    authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
+    queryset = BoxStatuses.objects.all()
+
+class LocationsViewSet(viewsets.ModelViewSet):
+    serializer_class = LocationsSerializer
+    authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
+    queryset = Locations.objects.all()
+
+class BoxesViewSet(viewsets.ModelViewSet):
+    serializer_class = BoxesSerializer
+    authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
+    queryset = Boxes.objects.all()
